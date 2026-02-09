@@ -1,47 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Lalit - Firestore Edition</title>
+    <title>The Lalit School - Advanced Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-50 p-4">
+<body class="bg-slate-100 min-h-screen pb-10">
 
-    <div class="max-w-md mx-auto bg-white p-6 rounded-3xl shadow-2xl border border-indigo-100">
-        <h1 class="text-2xl font-bold mb-6 text-indigo-900 flex items-center">
-            <span class="mr-2">🏫</span> Student Admission
-        </h1>
+    <nav class="bg-indigo-900 text-white p-4 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">THE LALIT SYSTEM</h1>
+                <p class="text-[10px] text-indigo-300 uppercase tracking-widest leading-none">Professional Dashboard</p>
+            </div>
+            <span class="bg-green-500 text-[10px] font-bold px-2 py-1 rounded">FIRESTORE LIVE</span>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 max-w-4xl">
         
-        <div class="space-y-4">
-            <div>
-                <label class="text-xs font-bold text-gray-500 uppercase ml-1">Full Name</label>
-                <input type="text" id="name" placeholder="Enter student name" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition">
+        <div class="bg-white p-6 rounded-3xl shadow-xl border border-indigo-50 mb-8 mt-2">
+            <h3 class="text-xl font-bold text-indigo-900 mb-6 flex items-center border-b pb-3">
+                <span class="bg-indigo-100 p-2 rounded-lg mr-3 text-sm">📁</span> Student Profile Entry
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="space-y-4">
+                    <p class="text-xs font-black text-indigo-400 uppercase tracking-wider">Personal Info</p>
+                    <input type="text" id="sName" placeholder="Student ka Pura Naam" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                    <div class="flex gap-2">
+                        <input type="date" id="sDob" class="w-1/2 p-3 bg-slate-50 border rounded-xl outline-none text-gray-500 text-sm">
+                        <select id="sGender" class="w-1/2 p-3 bg-slate-50 border rounded-xl outline-none text-gray-500 text-sm">
+                            <option value="">Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <input type="number" id="sAadhar" placeholder="Aadhaar Number" class="w-full p-3 bg-slate-50 border rounded-xl outline-none">
+                </div>
+
+                <div class="space-y-4">
+                    <p class="text-xs font-black text-indigo-400 uppercase tracking-wider">Academic & Contact</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="sClass" placeholder="Class (e.g. 10th-A)" class="w-1/2 p-3 bg-slate-50 border rounded-xl outline-none">
+                        <input type="number" id="sRoll" placeholder="Roll No" class="w-1/2 p-3 bg-slate-50 border rounded-xl outline-none">
+                    </div>
+                    <input type="text" id="fName" placeholder="Pita ka Naam (Father's Name)" class="w-full p-3 bg-slate-50 border rounded-xl outline-none">
+                    <input type="tel" id="sPhone" placeholder="Guardian Mobile Number" class="w-full p-3 bg-slate-50 border rounded-xl outline-none">
+                </div>
+
+                <div class="md:col-span-2 space-y-2">
+                    <p class="text-xs font-black text-indigo-400 uppercase tracking-wider">Address</p>
+                    <textarea id="sAddress" placeholder="Complete Residential Address..." class="w-full p-3 bg-slate-50 border rounded-xl outline-none h-20 resize-none"></textarea>
+                </div>
+
+                <button onclick="saveAdvancedStudent()" id="saveBtn" class="md:col-span-2 bg-indigo-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-indigo-700 active:scale-[0.98] transition-all">
+                    CONFIRM ADMISSION & SAVE RECORD
+                </button>
             </div>
-            <div>
-                <label class="text-xs font-bold text-gray-500 uppercase ml-1">Class</label>
-                <input type="text" id="class" placeholder="e.g. 10th" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition">
-            </div>
-            <button onclick="saveToFirestore()" id="saveBtn" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-700 active:scale-95 transition-all">
-                CONFIRM ADMISSION
-            </button>
         </div>
 
-        <div class="mt-10">
-            <h2 class="font-bold text-gray-700 border-b pb-2 mb-4 flex justify-between">
-                <span>Recent Admissions</span>
-                <span id="count" class="bg-indigo-100 text-indigo-600 px-2 rounded-full text-xs">0</span>
-            </h2>
-            <div id="studentList" class="space-y-3">
-                <p class="text-gray-400 text-sm italic">Connecting to Firestore...</p>
-            </div>
+        <div class="flex flex-col md:flex-row gap-4 mb-4 items-center justify-between">
+            <h2 class="text-2xl font-black text-indigo-900">Directory <span id="totalCount" class="text-sm bg-indigo-200 px-3 py-1 rounded-full text-indigo-700 ml-2">0</span></h2>
+            <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Student dhoondein (Naam/Phone)..." class="w-full md:w-72 p-3 border rounded-2xl shadow-sm outline-none focus:border-indigo-500">
+        </div>
+
+        <div id="studentContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <p class="text-center text-gray-400 animate-pulse py-10">Records load ho rahe hain...</p>
         </div>
     </div>
 
     <script>
-        // Aapka Config
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDqDmsMp2eAuHJBcjW-ciO2JcLTXapiIrs",
             authDomain: "the-lalit-d7472.firebaseapp.com",
@@ -51,72 +89,92 @@
             appId: "1:479237084229:web:f1da384b45c5883b12ff2c"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(); // Firestore use kar rahe hain ab
+        const db = firebase.firestore();
 
-        // Data Save Karne ka Function
-        async function saveToFirestore() {
-            const name = document.getElementById('name').value;
-            const cls = document.getElementById('class').value;
+        // Advanced Save Function
+        async function saveAdvancedStudent() {
             const btn = document.getElementById('saveBtn');
+            const data = {
+                name: document.getElementById('sName').value,
+                dob: document.getElementById('sDob').value,
+                gender: document.getElementById('sGender').value,
+                class: document.getElementById('sClass').value,
+                roll: document.getElementById('sRoll').value,
+                fatherName: document.getElementById('fName').value,
+                phone: document.getElementById('sPhone').value,
+                aadhar: document.getElementById('sAadhar').value,
+                address: document.getElementById('sAddress').value,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
 
-            if (name && cls) {
-                btn.disabled = true;
-                btn.innerText = "Processing...";
-
+            if(data.name && data.phone && data.class) {
+                btn.disabled = true; btn.innerText = "Saving to Database...";
                 try {
-                    // Aapke 'students' collection mein data add ho raha hai
-                    await db.collection("students").add({
-                        studentName: name,
-                        studentClass: cls,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    
-                    alert("Success! Student added to Firestore.");
-                    document.getElementById('name').value = "";
-                    document.getElementById('class').value = "";
-                } catch (error) {
-                    alert("Firestore Error: " + error.message);
-                } finally {
-                    btn.disabled = false;
-                    btn.innerText = "CONFIRM ADMISSION";
+                    await db.collection("students").add(data);
+                    alert("✅ Admission Successful!");
+                    ["sName","sDob","sGender","sClass","sRoll","fName","sPhone","sAadhar","sAddress"].forEach(id => document.getElementById(id).value = "");
+                } catch(e) { alert("Error: " + e.message); }
+                btn.disabled = false; btn.innerText = "CONFIRM ADMISSION & SAVE RECORD";
+            } else { alert("❌ Naam, Class aur Phone zaroori hai!"); }
+        }
+
+        // Live Data Reader with Professional Cards
+        function loadStudents() {
+            db.collection("students").orderBy("createdAt", "desc").onSnapshot((snap) => {
+                const container = document.getElementById('studentContainer');
+                document.getElementById('totalCount').innerText = snap.size;
+                container.innerHTML = "";
+                
+                if(snap.empty) {
+                    container.innerHTML = "<p class='col-span-full text-center py-20 text-gray-400'>Koi record nahi mila.</p>";
+                    return;
                 }
-            } else {
-                alert("Please fill all fields!");
-            }
-        }
 
-        // Live Data Reading from Firestore
-        db.collection("students").orderBy("timestamp", "desc").onSnapshot((querySnapshot) => {
-            const listDiv = document.getElementById('studentList');
-            const countBadge = document.getElementById('count');
-            listDiv.innerHTML = "";
-            
-            let count = 0;
-            querySnapshot.forEach((doc) => {
-                count++;
-                const data = doc.data();
-                listDiv.innerHTML += `
-                    <div class="p-3 bg-white border border-gray-100 rounded-xl shadow-sm flex justify-between items-center">
-                        <div>
-                            <p class="font-bold text-gray-800">${data.studentName}</p>
-                            <p class="text-xs text-gray-500">Class: ${data.studentClass}</p>
+                snap.forEach((doc) => {
+                    const s = doc.data();
+                    container.innerHTML += `
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 student-card" data-search="${s.name.toLowerCase()} ${s.phone}">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h4 class="font-bold text-lg text-slate-800 leading-tight">${s.name}</h4>
+                                    <p class="text-indigo-600 font-bold text-xs uppercase">Class: ${s.class} | Roll: ${s.roll}</p>
+                                </div>
+                                <button onclick="deleteStudent('${doc.id}')" class="bg-red-50 text-red-400 p-2 rounded-xl text-xs hover:bg-red-100">🗑️</button>
+                            </div>
+                            <div class="text-[11px] text-gray-500 space-y-1 border-t pt-3">
+                                <p>👨‍👩‍👦 <b>Father:</b> ${s.fatherName || 'N/A'}</p>
+                                <p>📞 <b>Phone:</b> ${s.phone}</p>
+                                <p>📍 <b>Address:</b> ${s.address || 'N/A'}</p>
+                            </div>
+                            <div class="mt-4 flex gap-2">
+                                <button onclick="addFee('${doc.id}', '${s.name}')" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs font-bold shadow-md shadow-green-100">FEES ENTRY</button>
+                                <button onclick="viewProfile('${doc.id}')" class="px-4 bg-slate-100 text-slate-600 py-2 rounded-xl text-xs font-bold">PROFILE</button>
+                            </div>
                         </div>
-                        <button onclick="deleteDoc('${doc.id}')" class="text-red-400 text-xs hover:text-red-600">Delete</button>
-                    </div>
-                `;
+                    `;
+                });
             });
-            countBadge.innerText = count;
-            if (count === 0) listDiv.innerHTML = "<p class='text-gray-400 text-sm'>No records found.</p>";
-        });
+        }
 
-        // Delete Function
-        function deleteDoc(id) {
-            if(confirm("Delete this record?")) {
-                db.collection("students").doc(id).delete();
+        function searchStudent() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.student-card').forEach(card => {
+                card.style.display = card.dataset.search.includes(query) ? "block" : "none";
+            });
+        }
+
+        function deleteStudent(id) { if(confirm("Kya aap is record ko hamesha ke liye delete karna chahte hain?")) db.collection("students").doc(id).delete(); }
+
+        function addFee(id, name) {
+            const amount = prompt(`${name} ki Fees Amount (Rs) darj karein:`);
+            if(amount) {
+                db.collection("fees").add({ studentId: id, name, amount, date: new Date().toLocaleDateString() });
+                alert("Success: Fees record ho gayi.");
             }
         }
+
+        loadStudents();
     </script>
 </body>
 </html>
