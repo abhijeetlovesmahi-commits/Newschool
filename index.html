@@ -3,83 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Lalit School - Advanced Management</title>
+    <title>The Lalit - Professional School ERP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        .profile-img { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 3px solid #4f46e5; }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen pb-10">
+<body class="bg-slate-50 min-h-screen pb-20">
 
-    <nav class="bg-indigo-900 text-white p-4 shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
-            <div>
-                <h1 class="text-xl font-bold tracking-tight">THE LALIT SYSTEM</h1>
-                <p class="text-[10px] text-indigo-300 uppercase tracking-widest leading-none">Professional Dashboard</p>
-            </div>
-            <span class="bg-green-500 text-[10px] font-bold px-2 py-1 rounded">FIRESTORE LIVE</span>
+    <nav class="bg-indigo-900 text-white p-4 shadow-xl sticky top-0 z-50 flex justify-between items-center">
+        <div>
+            <h1 class="font-bold text-lg">THE LALIT ERP</h1>
+            <p class="text-[10px] text-indigo-300">STUDENT PROFILE MANAGEMENT</p>
         </div>
+        <div id="totalFeesHeader" class="text-xs bg-indigo-800 px-3 py-1 rounded-full border border-indigo-400">Total: ₹0</div>
     </nav>
 
     <div class="container mx-auto p-4 max-w-4xl">
         
-        <div class="bg-white p-6 rounded-3xl shadow-xl border border-indigo-50 mb-8 mt-2">
-            <h3 class="text-xl font-bold text-indigo-900 mb-6 flex items-center border-b pb-3">
-                <span class="bg-indigo-100 p-2 rounded-lg mr-3 text-sm">📁</span> Student Profile Entry
+        <div class="bg-white p-6 rounded-3xl shadow-xl border border-indigo-50 mb-8">
+            <h3 class="text-xl font-black text-indigo-900 mb-6 flex items-center border-b pb-4">
+                <span class="bg-indigo-600 text-white p-2 rounded-lg mr-3 text-sm">👤</span> NEW PROFILE ENTRY
             </h3>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div class="space-y-4">
-                    <p class="text-xs font-black text-indigo-400 uppercase tracking-wider">Personal Info</p>
-                    <input type="text" id="sName" placeholder="Student ka Pura Naam" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-2xl p-4 bg-slate-50">
+                    <img id="imgPreview" src="https://via.placeholder.com/150?text=No+Photo" class="profile-img mb-3">
+                    <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="previewPhoto(this)">
+                    <button onclick="document.getElementById('photoInput').click()" class="text-[10px] bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-bold uppercase">Choose Photo</button>
+                </div>
+
+                <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" id="sName" placeholder="Student ka Pura Naam" class="p-3 bg-slate-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
+                    
                     <div class="flex gap-2">
-                        <input type="date" id="sDob" class="w-1/2 p-3 bg-slate-50 border rounded-xl outline-none text-gray-500 text-sm">
-                        <select id="sGender" class="w-1/2 p-3 bg-slate-50 border rounded-xl outline-none text-gray-500 text-sm">
-                            <option value="">Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
+                        <select id="sClass" class="w-full p-3 bg-slate-50 border rounded-xl outline-none text-gray-500">
+                            <option value="">Class Chunein</option>
+                            <option value="Pre-Nursery">Pre-Nursery</option>
+                            <option value="Nursery">Nursery</option>
+                            <option value="LKG">LKG</option>
+                            <option value="UKG">UKG</option>
+                            <script>for(let i=1; i<=12; i++) document.write(`<option value="${i}th">${i}th</option>`);</script>
+                        </select>
+                        <select id="sSection" class="w-24 p-3 bg-slate-50 border rounded-xl outline-none text-gray-500">
+                            <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option>
                         </select>
                     </div>
-                    <input type="number" id="sAadhar" placeholder="Aadhaar Number" class="w-full p-3 bg-slate-50 border rounded-xl outline-none">
+
+                    <input type="text" id="fName" placeholder="Father's Name" class="p-3 bg-slate-50 border rounded-xl outline-none">
+                    <input type="tel" id="sPhone" placeholder="Mobile Number" class="p-3 bg-slate-50 border rounded-xl outline-none">
+                    <input type="text" id="sId" placeholder="Unique ID (e.g. 1001)" class="p-3 bg-indigo-50 border-indigo-200 border rounded-xl outline-none font-bold text-indigo-700" title="Aap apni marzi ki ID de sakte hain ya system generate karega">
                 </div>
 
-                <div class="space-y-4">
-                    <p class="text-xs font-black text-indigo-400 uppercase tracking-wider">Academic & Contact</p>
-                    <div class="flex gap-2">
-                        <input type="text" id="sClass" placeholder="Class (e.g. 10th-A)" class="w-1/2 p-3 bg-slate-50 border rounded-xl outline-none">
-                        <input type="number" id="sRoll" placeholder="Roll No" class="w-1/2 p-3 bg-slate-50 border rounded-xl outline-none">
-                    </div>
-                    <input type="text" id="fName" placeholder="Pita ka Naam (Father's Name)" class="w-full p-3 bg-slate-50 border rounded-xl outline-none">
-                    <input type="tel" id="sPhone" placeholder="Guardian Mobile Number" class="w-full p-3 bg-slate-50 border rounded-xl outline-none">
-                </div>
-
-                <div class="md:col-span-2 space-y-2">
-                    <p class="text-xs font-black text-indigo-400 uppercase tracking-wider">Address</p>
-                    <textarea id="sAddress" placeholder="Complete Residential Address..." class="w-full p-3 bg-slate-50 border rounded-xl outline-none h-20 resize-none"></textarea>
-                </div>
-
-                <button onclick="saveAdvancedStudent()" id="saveBtn" class="md:col-span-2 bg-indigo-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-indigo-700 active:scale-[0.98] transition-all">
-                    CONFIRM ADMISSION & SAVE RECORD
+                <button onclick="saveProfile()" id="saveBtn" class="md:col-span-3 bg-indigo-600 text-white font-black py-4 rounded-2xl shadow-lg hover:bg-indigo-700 active:scale-95 transition-all">
+                    GENERATE STUDENT ID & SAVE PROFILE
                 </button>
             </div>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-4 mb-4 items-center justify-between">
-            <h2 class="text-2xl font-black text-indigo-900">Directory <span id="totalCount" class="text-sm bg-indigo-200 px-3 py-1 rounded-full text-indigo-700 ml-2">0</span></h2>
-            <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Student dhoondein (Naam/Phone)..." class="w-full md:w-72 p-3 border rounded-2xl shadow-sm outline-none focus:border-indigo-500">
+        <div class="flex gap-2 mb-6">
+            <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search by Name or Student ID..." class="flex-1 p-4 rounded-2xl border-none shadow-md outline-none focus:ring-2 focus:ring-indigo-500">
         </div>
 
         <div id="studentContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <p class="text-center text-gray-400 animate-pulse py-10">Records load ho rahe hain...</p>
+            <p class="text-center py-10 text-gray-400 col-span-full">Profiles load ho rahi hain...</p>
         </div>
     </div>
 
     <script>
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDqDmsMp2eAuHJBcjW-ciO2JcLTXapiIrs",
             authDomain: "the-lalit-d7472.firebaseapp.com",
@@ -91,90 +84,77 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        let studentPhotoBase64 = "";
 
-        // Advanced Save Function
-        async function saveAdvancedStudent() {
+        // Photo Preview and Conversion
+        function previewPhoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imgPreview').src = e.target.result;
+                    studentPhotoBase64 = e.target.result; // Base64 string for saving
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function saveProfile() {
             const btn = document.getElementById('saveBtn');
-            const data = {
+            const studentData = {
                 name: document.getElementById('sName').value,
-                dob: document.getElementById('sDob').value,
-                gender: document.getElementById('sGender').value,
                 class: document.getElementById('sClass').value,
-                roll: document.getElementById('sRoll').value,
-                fatherName: document.getElementById('fName').value,
+                section: document.getElementById('sSection').value,
+                father: document.getElementById('fName').value,
                 phone: document.getElementById('sPhone').value,
-                aadhar: document.getElementById('sAadhar').value,
-                address: document.getElementById('sAddress').value,
+                customId: document.getElementById('sId').value || "TLI-" + Date.now().toString().slice(-4),
+                photo: studentPhotoBase64,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            if(data.name && data.phone && data.class) {
-                btn.disabled = true; btn.innerText = "Saving to Database...";
+            if(studentData.name && studentData.class) {
+                btn.disabled = true; btn.innerText = "Creating Profile...";
                 try {
-                    await db.collection("students").add(data);
-                    alert("✅ Admission Successful!");
-                    ["sName","sDob","sGender","sClass","sRoll","fName","sPhone","sAadhar","sAddress"].forEach(id => document.getElementById(id).value = "");
-                } catch(e) { alert("Error: " + e.message); }
-                btn.disabled = false; btn.innerText = "CONFIRM ADMISSION & SAVE RECORD";
-            } else { alert("❌ Naam, Class aur Phone zaroori hai!"); }
+                    await db.collection("students").add(studentData);
+                    alert("Mubarak ho! Student ID: " + studentData.customId + " ban gayi hai.");
+                    location.reload();
+                } catch(e) { alert(e.message); btn.disabled = false; }
+            } else { alert("Naam aur Class bharna zaruri hai!"); }
         }
 
-        // Live Data Reader with Professional Cards
-        function loadStudents() {
+        function loadProfiles() {
             db.collection("students").orderBy("createdAt", "desc").onSnapshot((snap) => {
                 const container = document.getElementById('studentContainer');
-                document.getElementById('totalCount').innerText = snap.size;
                 container.innerHTML = "";
-                
-                if(snap.empty) {
-                    container.innerHTML = "<p class='col-span-full text-center py-20 text-gray-400'>Koi record nahi mila.</p>";
-                    return;
-                }
-
-                snap.forEach((doc) => {
+                snap.forEach(doc => {
                     const s = doc.data();
+                    const photo = s.photo || 'https://via.placeholder.com/80?text=No+Photo';
                     container.innerHTML += `
-                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 student-card" data-search="${s.name.toLowerCase()} ${s.phone}">
-                            <div class="flex justify-between items-start mb-3">
-                                <div>
-                                    <h4 class="font-bold text-lg text-slate-800 leading-tight">${s.name}</h4>
-                                    <p class="text-indigo-600 font-bold text-xs uppercase">Class: ${s.class} | Roll: ${s.roll}</p>
-                                </div>
-                                <button onclick="deleteStudent('${doc.id}')" class="bg-red-50 text-red-400 p-2 rounded-xl text-xs hover:bg-red-100">🗑️</button>
+                        <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex items-center gap-4 student-card" data-search="${s.name.toLowerCase()} ${s.customId}">
+                            <img src="${photo}" class="w-16 h-16 rounded-2xl object-cover border">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-gray-800 leading-tight">${s.name}</h4>
+                                <p class="text-[10px] font-bold text-indigo-600 uppercase">ID: ${s.customId} | Class: ${s.class}-${s.section}</p>
+                                <p class="text-[10px] text-gray-400">Father: ${s.father}</p>
                             </div>
-                            <div class="text-[11px] text-gray-500 space-y-1 border-t pt-3">
-                                <p>👨‍👩‍👦 <b>Father:</b> ${s.fatherName || 'N/A'}</p>
-                                <p>📞 <b>Phone:</b> ${s.phone}</p>
-                                <p>📍 <b>Address:</b> ${s.address || 'N/A'}</p>
+                            <div class="flex flex-col gap-1">
+                                <button onclick="addFee('${doc.id}', '${s.name}')" class="bg-green-100 text-green-700 px-3 py-1 rounded-lg text-[10px] font-black uppercase">Fees</button>
+                                <button onclick="deleteProfile('${doc.id}')" class="text-red-300 hover:text-red-500">🗑️</button>
                             </div>
-                            <div class="mt-4 flex gap-2">
-                                <button onclick="addFee('${doc.id}', '${s.name}')" class="flex-1 bg-green-600 text-white py-2 rounded-xl text-xs font-bold shadow-md shadow-green-100">FEES ENTRY</button>
-                                <button onclick="viewProfile('${doc.id}')" class="px-4 bg-slate-100 text-slate-600 py-2 rounded-xl text-xs font-bold">PROFILE</button>
-                            </div>
-                        </div>
-                    `;
+                        </div>`;
                 });
             });
         }
 
         function searchStudent() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            document.querySelectorAll('.student-card').forEach(card => {
-                card.style.display = card.dataset.search.includes(query) ? "block" : "none";
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.student-card').forEach(c => {
+                c.style.display = c.dataset.search.includes(q) ? "flex" : "none";
             });
         }
 
-        function deleteStudent(id) { if(confirm("Kya aap is record ko hamesha ke liye delete karna chahte hain?")) db.collection("students").doc(id).delete(); }
+        function deleteProfile(id) { if(confirm("Profile delete karein?")) db.collection("students").doc(id).delete(); }
 
-        function addFee(id, name) {
-            const amount = prompt(`${name} ki Fees Amount (Rs) darj karein:`);
-            if(amount) {
-                db.collection("fees").add({ studentId: id, name, amount, date: new Date().toLocaleDateString() });
-                alert("Success: Fees record ho gayi.");
-            }
-        }
-
-        loadStudents();
+        loadProfiles();
     </script>
 </body>
 </html>
