@@ -3,128 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Lalit School - Master ERP</title>
+    <title>The Lalit - Premium ERP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        body { font-family: 'Poppins', sans-serif; }
-        .form-input { @apply w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-sm; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .input-stylish { @apply w-full p-4 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all text-sm shadow-sm; }
+        .label-text { @apply text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-2 block; }
+        .btn-premium { background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%); transition: all 0.3s ease; }
+        .btn-premium:hover { transform: translateY(-2px); shadow: 0 10px 20px -10px rgba(79, 70, 229, 0.5); }
+        .photo-frame { border: 4px solid white; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen">
+<body class="pb-20">
 
-    <nav class="bg-indigo-900 text-white p-4 shadow-xl sticky top-0 z-50 flex justify-between items-center">
-        <h1 class="font-bold text-xl tracking-wider">THE LALIT ERP</h1>
-        <div class="flex gap-4 items-center">
-            <span id="totalCount" class="bg-indigo-700 px-3 py-1 rounded-full text-xs">Students: 0</span>
+    <nav class="sticky top-0 z-50 glass-card px-6 py-4 flex justify-between items-center border-b border-slate-200 mb-8">
+        <div>
+            <h1 class="text-xl font-extrabold tracking-tighter text-slate-900">THE LALIT <span class="text-indigo-600">ERP</span></h1>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <p class="text-[10px] font-bold text-slate-400 uppercase">Cloud Database Active</p>
+            </div>
+        </div>
+        <div class="bg-indigo-50 px-4 py-2 rounded-2xl border border-indigo-100">
+            <span id="totalCount" class="text-xs font-bold text-indigo-700 underline underline-offset-4">0 Students</span>
         </div>
     </nav>
 
-    <div class="container mx-auto p-4 max-w-5xl">
+    <div class="container mx-auto px-4 max-w-5xl">
         
-        <div class="bg-white p-8 rounded-[2rem] shadow-2xl border border-indigo-50 mb-10">
-            <div class="flex justify-between items-center border-b pb-5 mb-8">
-                <h3 class="text-2xl font-bold text-indigo-900">Student Master Profile</h3>
-                <span class="text-xs text-gray-400 uppercase font-bold tracking-widest">Registration Module</span>
+        <div class="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-slate-200/60 mb-12">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-extrabold text-slate-900">Student Registration</h2>
+                <p class="text-slate-400 text-sm mt-1 font-medium">Create a new student profile in the school database.</p>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
                 
-                <div class="md:col-span-1 flex flex-col items-center">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-3">Student Photo</p>
+                <div class="md:col-span-1 flex flex-col items-center space-y-4">
                     <div class="relative group">
-                        <img id="imgPreview" src="https://via.placeholder.com/150?text=Upload" class="w-32 h-32 rounded-3xl object-cover border-4 border-indigo-50 shadow-md">
+                        <img id="imgPreview" src="https://ui-avatars.com/api/?name=User&background=EEF2FF&color=4F46E5&size=200" class="w-40 h-40 rounded-[2.5rem] object-cover photo-frame transition-transform group-hover:scale-105">
                         <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="previewPhoto(this)">
-                        <button onclick="document.getElementById('photoInput').click()" class="absolute -bottom-2 -right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
+                        <button onclick="document.getElementById('photoInput').click()" class="absolute -bottom-2 -right-2 bg-indigo-600 text-white p-4 rounded-2xl shadow-xl hover:scale-110 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         </button>
                     </div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Profile Picture</p>
                 </div>
 
-                <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="md:col-span-2">
-                        <label class="text-[10px] font-bold text-gray-500 ml-1">Full Name *</label>
-                        <input type="text" id="sName" placeholder="John Doe" class="form-input">
+                <div class="md:col-span-3 space-y-10">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label class="label-text">Full Name *</label>
+                            <input type="text" id="sName" placeholder="Enter full name" class="input-stylish">
+                        </div>
+                        <div>
+                            <label class="label-text">Date of Birth</label>
+                            <input type="date" id="sDob" class="input-stylish text-slate-500">
+                        </div>
+                        <div>
+                            <label class="label-text">Gender</label>
+                            <select id="sGender" class="input-stylish text-slate-500">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label-text">Class *</label>
+                            <select id="sClass" class="input-stylish font-bold text-indigo-600">
+                                <option value="">Select Class</option>
+                                <option value="Pre-Nursery">Pre-Nursery</option>
+                                <option value="Nursery">Nursery</option>
+                                <option value="LKG">LKG</option>
+                                <option value="UKG">UKG</option>
+                                <script>for(let i=1; i<=12; i++) document.write(`<option value="${i}th">${i}th</option>`);</script>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label-text">Section</label>
+                            <select id="sSection" class="input-stylish">
+                                <option value="A">Section A</option><option value="B">Section B</option><option value="C">Section C</option><option value="D">Section D</option>
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 ml-1">Date of Birth</label>
-                        <input type="date" id="sDob" class="form-input">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 ml-1">Gender</label>
-                        <select id="sGender" class="form-input">
-                            <option value="">Select</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 ml-1">Class *</label>
-                        <select id="sClass" class="form-input">
-                            <option value="">Select Class</option>
-                            <option value="Pre-Nursery">Pre-Nursery</option>
-                            <option value="Nursery">Nursery</option>
-                            <option value="LKG">LKG</option>
-                            <option value="UKG">UKG</option>
-                            <script>for(let i=1; i<=12; i++) document.write(`<option value="${i}th">${i}th</option>`);</script>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 ml-1">Section</label>
-                        <select id="sSection" class="form-input">
-                            <option value="A">Section A</option>
-                            <option value="B">Section B</option>
-                            <option value="C">Section C</option>
-                            <option value="D">Section D</option>
-                        </select>
-                    </div>
-                </div>
 
-                <div class="md:col-span-4 grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 p-6 rounded-2xl">
-                    <div class="md:col-span-2">
-                        <label class="text-[10px] font-bold text-gray-500 ml-1">Father's Name</label>
-                        <input type="text" id="fName" placeholder="Mr. Smith" class="form-input bg-white">
+                    <div class="bg-slate-50 p-8 rounded-[2rem] grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2 text-xs font-black text-slate-300 uppercase tracking-[0.2em] mb-2">Family & Identity</div>
+                        <div>
+                            <label class="label-text text-slate-500">Father's Name</label>
+                            <input type="text" id="fName" class="input-stylish">
+                        </div>
+                        <div>
+                            <label class="label-text text-slate-500">Mother's Name</label>
+                            <input type="text" id="mName" class="input-stylish">
+                        </div>
+                        <div>
+                            <label class="label-text text-slate-500">Mobile Number *</label>
+                            <input type="tel" id="sPhone" class="input-stylish">
+                        </div>
+                        <div>
+                            <label class="label-text text-slate-500">WhatsApp Number</label>
+                            <input type="tel" id="sWhatsapp" class="input-stylish">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="label-text text-slate-500">Aadhaar Card Number</label>
+                            <input type="number" id="sAadhar" class="input-stylish">
+                        </div>
                     </div>
-                    <div class="md:col-span-2">
-                        <label class="text-[10px] font-bold text-gray-500 ml-1">Mother's Name</label>
-                        <input type="text" id="mName" placeholder="Mrs. Smith" class="form-input bg-white">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 ml-1">Mobile No. *</label>
-                        <input type="tel" id="sPhone" placeholder="98XXXXXXXX" class="form-input bg-white">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 ml-1">WhatsApp No.</label>
-                        <input type="tel" id="sWhatsapp" placeholder="WhatsApp Number" class="form-input bg-white">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="text-[10px] font-bold text-gray-500 ml-1">Aadhaar Number</label>
-                        <input type="number" id="sAadhar" placeholder="12 Digit Aadhaar" class="form-input bg-white">
-                    </div>
-                </div>
 
-                <div class="md:col-span-4">
-                    <label class="text-[10px] font-bold text-gray-500 ml-1">Residential Address</label>
-                    <textarea id="sAddress" placeholder="Enter full permanent address..." class="form-input h-20 resize-none"></textarea>
-                </div>
+                    <div>
+                        <label class="label-text">Residential Address</label>
+                        <textarea id="sAddress" rows="3" placeholder="Full permanent address" class="input-stylish resize-none"></textarea>
+                    </div>
 
-                <button onclick="saveMasterProfile()" id="saveBtn" class="md:col-span-4 bg-indigo-600 text-white font-bold py-5 rounded-2xl shadow-xl hover:bg-indigo-700 active:scale-95 transition-all text-lg">
-                    SUBMIT & GENERATE ID CARD
-                </button>
+                    <button onclick="registerStudent()" id="saveBtn" class="btn-premium w-full text-white font-bold py-5 rounded-[2rem] shadow-2xl shadow-indigo-200 text-lg flex items-center justify-center gap-3">
+                        Register Student
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-4 mb-6 items-center">
-            <h2 class="text-xl font-bold text-gray-700 min-w-max">Master Directory</h2>
-            <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search by Name, Mobile or ID..." class="w-full p-4 rounded-2xl border-none shadow-md outline-none">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10 px-4">
+            <h3 class="text-2xl font-extrabold text-slate-900">Student Directory</h3>
+            <div class="relative w-full md:w-80 mt-4 md:mt-0">
+                <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search directory..." class="w-full p-4 pl-12 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-4 focus:ring-slate-100 shadow-sm">
+                <svg class="w-5 h-5 absolute left-4 top-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
         </div>
 
-        <div id="studentContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div id="studentContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             </div>
     </div>
 
@@ -140,20 +152,20 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        let currentPhoto = "";
+        let studentPhoto = "";
 
         function previewPhoto(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     document.getElementById('imgPreview').src = e.target.result;
-                    currentPhoto = e.target.result;
+                    studentPhoto = e.target.result;
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        async function saveMasterProfile() {
+        async function registerStudent() {
             const btn = document.getElementById('saveBtn');
             const data = {
                 name: document.getElementById('sName').value,
@@ -167,54 +179,46 @@
                 whatsapp: document.getElementById('sWhatsapp').value,
                 aadhar: document.getElementById('sAadhar').value,
                 address: document.getElementById('sAddress').value,
-                photo: currentPhoto,
+                photo: studentPhoto,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
             if(!data.name || !data.class || !data.phone) {
-                alert("Please fill Mandatory fields (*)");
-                return;
+                alert("Name, Class and Phone are mandatory!"); return;
             }
 
-            btn.disabled = true; btn.innerText = "Generating Profile...";
+            btn.disabled = true; btn.innerText = "Synchronizing...";
 
             try {
-                // Get Total count for Auto-ID
                 const snap = await db.collection("students").get();
-                data.idNumber = "TLI-" + (snap.size + 101); // Auto-generates TLI-101, 102...
-
+                data.idNumber = "LALIT-" + (snap.size + 101);
                 await db.collection("students").add(data);
-                alert("Success! Profile Created with ID: " + data.idNumber);
+                alert("Registered Successfully with ID: " + data.idNumber);
                 location.reload();
             } catch(e) { alert(e.message); btn.disabled = false; }
         }
 
-        function loadProfiles() {
+        function loadData() {
             db.collection("students").orderBy("createdAt", "desc").onSnapshot((snap) => {
                 const container = document.getElementById('studentContainer');
-                document.getElementById('totalCount').innerText = "Students: " + snap.size;
+                document.getElementById('totalCount').innerText = snap.size + " Students";
                 container.innerHTML = "";
                 snap.forEach(doc => {
                     const s = doc.data();
                     container.innerHTML += `
-                        <div class="bg-white p-5 rounded-[1.5rem] shadow-sm border border-gray-100 flex gap-4 student-card" data-search="${s.name.toLowerCase()} ${s.phone} ${s.idNumber}">
-                            <img src="${s.photo || 'https://via.placeholder.com/80'}" class="w-20 h-20 rounded-2xl object-cover shadow-sm">
-                            <div class="flex-1">
-                                <p class="text-[10px] font-black text-indigo-500 uppercase">${s.idNumber}</p>
-                                <h4 class="font-bold text-gray-800 leading-tight">${s.name}</h4>
-                                <p class="text-[10px] text-gray-400 font-bold uppercase mb-2">${s.class} | Section ${s.section}</p>
-                                <div class="grid grid-cols-2 gap-1 text-[9px] text-gray-500">
-                                    <p><b>F:</b> ${s.father || '-'}</p>
-                                    <p><b>M:</b> ${s.mother || '-'}</p>
-                                    <p><b>PH:</b> ${s.phone}</p>
-                                    <p><b>WA:</b> ${s.whatsapp || '-'}</p>
-                                </div>
+                        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-center text-center student-card" data-search="${s.name.toLowerCase()} ${s.idNumber}">
+                            <img src="${s.photo || 'https://ui-avatars.com/api/?name='+s.name}" class="w-24 h-24 rounded-full object-cover mb-4 border-4 border-slate-50">
+                            <span class="text-[9px] font-black bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full mb-2 uppercase tracking-widest">${s.idNumber}</span>
+                            <h4 class="font-bold text-slate-800 text-lg leading-tight mb-1">${s.name}</h4>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase mb-4">${s.class} • Section ${s.section}</p>
+                            <div class="w-full grid grid-cols-2 gap-2 text-[10px] text-slate-500 mb-6 pt-4 border-t border-slate-50">
+                                <div class="text-left"><b>Father:</b> ${s.father || '-'}</div>
+                                <div class="text-right"><b>Phone:</b> ${s.phone}</div>
                             </div>
-                            <button onclick="deleteDoc('${doc.id}')" class="text-red-200 hover:text-red-500 transition-colors self-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
+                            <div class="flex w-full gap-2">
+                                <button onclick="deleteDoc('${doc.id}')" class="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                                <button class="flex-1 bg-slate-900 text-white text-[10px] font-bold py-3 rounded-xl uppercase tracking-widest">Full Profile</button>
+                            </div>
                         </div>`;
                 });
             });
@@ -227,9 +231,9 @@
             });
         }
 
-        function deleteDoc(id) { if(confirm("Permanently delete this profile?")) db.collection("students").doc(id).delete(); }
+        function deleteDoc(id) { if(confirm("Permanently delete this record?")) db.collection("students").doc(id).delete(); }
 
-        loadProfiles();
+        loadData();
     </script>
 </body>
 </html>
