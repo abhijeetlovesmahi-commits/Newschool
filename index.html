@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lalit - School System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <nav class="bg-indigo-800 text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-tight">THE LALIT SYSTEM</h1>
+            <span class="bg-green-500 px-3 py-1 rounded-full text-xs">Live Database</span>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 lg:max-w-4xl">
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-indigo-500 text-center">
+                <p class="text-gray-500 text-xs uppercase font-bold">Total Students</p>
+                <h2 id="totalCount" class="text-3xl font-black text-indigo-900">0</h2>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border-t-4 border-orange-500 text-center">
+                <p class="text-gray-500 text-xs uppercase font-bold">Today's Date</p>
+                <h2 id="currentDate" class="text-sm font-bold text-gray-700 mt-2">--/--/--</h2>
+            </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl shadow-sm mb-6 border border-gray-200">
+            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                <span class="bg-indigo-100 p-2 rounded-lg mr-2">📝</span> Admission Form
+            </h3>
+            <div class="grid grid-cols-1 gap-3">
+                <input type="text" id="name" placeholder="Full Name" class="p-3 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                <div class="flex gap-2">
+                    <input type="text" id="class" placeholder="Class" class="w-1/2 p-3 bg-gray-50 border rounded-xl outline-none">
+                    <input type="number" id="roll" placeholder="Roll No" class="w-1/2 p-3 bg-gray-50 border rounded-xl outline-none">
+                </div>
+                <button onclick="saveStudent()" id="saveBtn" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition-all">
+                    Register New Student
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-4 bg-gray-50 border-b font-bold text-gray-700">Recent Admissions</div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+                        <tr>
+                            <th class="p-4">Name</th>
+                            <th class="p-4">Class</th>
+                            <th class="p-4">Roll</th>
+                            <th class="p-4 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTable" class="divide-y text-sm">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqDmsMp2eAuHJBcjW-ciO2JcLTXapiIrs",
+            authDomain: "the-lalit-d7472.firebaseapp.com",
+            databaseURL: "https://the-lalit-d7472-default-rtdb.firebaseio.com",
+            projectId: "the-lalit-d7472",
+            storageBucket: "the-lalit-d7472.firebasestorage.app",
+            messagingSenderId: "479237084229",
+            appId: "1:479237084229:web:f1da384b45c5883b12ff2c"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Date set karein
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-GB');
+
+        // Student Save Function
+        function saveStudent() {
+            const name = document.getElementById('name').value;
+            const sClass = document.getElementById('class').value;
+            const roll = document.getElementById('roll').value;
+
+            if(name && sClass && roll) {
+                db.ref('students').push({
+                    name: name,
+                    class: sClass,
+                    roll: roll
+                }).then(() => {
+                    alert("Done!");
+                    document.getElementById('name').value = "";
+                    document.getElementById('class').value = "";
+                    document.getElementById('roll').value = "";
+                });
+            } else { alert("Khali mat chhodein!"); }
+        }
+
+        // Live Data Read Function
+        db.ref('students').on('value', (snapshot) => {
+            const table = document.getElementById('studentTable');
+            const totalDisplay = document.getElementById('totalCount');
+            table.innerHTML = "";
+            let count = 0;
+
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val();
+                const key = childSnapshot.key;
+                count++;
+                
+                table.innerHTML += `
+                    <tr class="hover:bg-indigo-50 transition">
+                        <td class="p-4 font-semibold text-gray-800">${data.name}</td>
+                        <td class="p-4 text-gray-600">${data.class}</td>
+                        <td class="p-4 text-gray-600">${data.roll}</td>
+                        <td class="p-4 text-center">
+                            <button onclick="deleteStudent('${key}')" class="text-red-500 bg-red-50 p-2 rounded-lg">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            totalDisplay.innerText = count;
+        });
+
+        // Delete Function
+        function deleteStudent(id) {
+            if(confirm("Student ka record delete karein?")) {
+                db.ref('students/' + id).remove();
+            }
+        }
+    </script>
+</body>
+</html>
