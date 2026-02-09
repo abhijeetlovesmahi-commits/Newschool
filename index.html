@@ -1,75 +1,131 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Lalit - Professional School ERP</title>
+    <title>The Lalit School - Master ERP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
-        .profile-img { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 3px solid #4f46e5; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .form-input { @apply w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-sm; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen pb-20">
+<body class="bg-slate-100 min-h-screen">
 
     <nav class="bg-indigo-900 text-white p-4 shadow-xl sticky top-0 z-50 flex justify-between items-center">
-        <div>
-            <h1 class="font-bold text-lg">THE LALIT ERP</h1>
-            <p class="text-[10px] text-indigo-300">STUDENT PROFILE MANAGEMENT</p>
+        <h1 class="font-bold text-xl tracking-wider">THE LALIT ERP</h1>
+        <div class="flex gap-4 items-center">
+            <span id="totalCount" class="bg-indigo-700 px-3 py-1 rounded-full text-xs">Students: 0</span>
         </div>
-        <div id="totalFeesHeader" class="text-xs bg-indigo-800 px-3 py-1 rounded-full border border-indigo-400">Total: ₹0</div>
     </nav>
 
-    <div class="container mx-auto p-4 max-w-4xl">
+    <div class="container mx-auto p-4 max-w-5xl">
         
-        <div class="bg-white p-6 rounded-3xl shadow-xl border border-indigo-50 mb-8">
-            <h3 class="text-xl font-black text-indigo-900 mb-6 flex items-center border-b pb-4">
-                <span class="bg-indigo-600 text-white p-2 rounded-lg mr-3 text-sm">👤</span> NEW PROFILE ENTRY
-            </h3>
+        <div class="bg-white p-8 rounded-[2rem] shadow-2xl border border-indigo-50 mb-10">
+            <div class="flex justify-between items-center border-b pb-5 mb-8">
+                <h3 class="text-2xl font-bold text-indigo-900">Student Master Profile</h3>
+                <span class="text-xs text-gray-400 uppercase font-bold tracking-widest">Registration Module</span>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-2xl p-4 bg-slate-50">
-                    <img id="imgPreview" src="https://via.placeholder.com/150?text=No+Photo" class="profile-img mb-3">
-                    <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="previewPhoto(this)">
-                    <button onclick="document.getElementById('photoInput').click()" class="text-[10px] bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-bold uppercase">Choose Photo</button>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                
+                <div class="md:col-span-1 flex flex-col items-center">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-3">Student Photo</p>
+                    <div class="relative group">
+                        <img id="imgPreview" src="https://via.placeholder.com/150?text=Upload" class="w-32 h-32 rounded-3xl object-cover border-4 border-indigo-50 shadow-md">
+                        <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="previewPhoto(this)">
+                        <button onclick="document.getElementById('photoInput').click()" class="absolute -bottom-2 -right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" id="sName" placeholder="Student ka Pura Naam" class="p-3 bg-slate-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
-                    
-                    <div class="flex gap-2">
-                        <select id="sClass" class="w-full p-3 bg-slate-50 border rounded-xl outline-none text-gray-500">
-                            <option value="">Class Chunein</option>
+                <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-bold text-gray-500 ml-1">Full Name *</label>
+                        <input type="text" id="sName" placeholder="John Doe" class="form-input">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 ml-1">Date of Birth</label>
+                        <input type="date" id="sDob" class="form-input">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 ml-1">Gender</label>
+                        <select id="sGender" class="form-input">
+                            <option value="">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 ml-1">Class *</label>
+                        <select id="sClass" class="form-input">
+                            <option value="">Select Class</option>
                             <option value="Pre-Nursery">Pre-Nursery</option>
                             <option value="Nursery">Nursery</option>
                             <option value="LKG">LKG</option>
                             <option value="UKG">UKG</option>
                             <script>for(let i=1; i<=12; i++) document.write(`<option value="${i}th">${i}th</option>`);</script>
                         </select>
-                        <select id="sSection" class="w-24 p-3 bg-slate-50 border rounded-xl outline-none text-gray-500">
-                            <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 ml-1">Section</label>
+                        <select id="sSection" class="form-input">
+                            <option value="A">Section A</option>
+                            <option value="B">Section B</option>
+                            <option value="C">Section C</option>
+                            <option value="D">Section D</option>
                         </select>
                     </div>
-
-                    <input type="text" id="fName" placeholder="Father's Name" class="p-3 bg-slate-50 border rounded-xl outline-none">
-                    <input type="tel" id="sPhone" placeholder="Mobile Number" class="p-3 bg-slate-50 border rounded-xl outline-none">
-                    <input type="text" id="sId" placeholder="Unique ID (e.g. 1001)" class="p-3 bg-indigo-50 border-indigo-200 border rounded-xl outline-none font-bold text-indigo-700" title="Aap apni marzi ki ID de sakte hain ya system generate karega">
                 </div>
 
-                <button onclick="saveProfile()" id="saveBtn" class="md:col-span-3 bg-indigo-600 text-white font-black py-4 rounded-2xl shadow-lg hover:bg-indigo-700 active:scale-95 transition-all">
-                    GENERATE STUDENT ID & SAVE PROFILE
+                <div class="md:col-span-4 grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 p-6 rounded-2xl">
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-bold text-gray-500 ml-1">Father's Name</label>
+                        <input type="text" id="fName" placeholder="Mr. Smith" class="form-input bg-white">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-bold text-gray-500 ml-1">Mother's Name</label>
+                        <input type="text" id="mName" placeholder="Mrs. Smith" class="form-input bg-white">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 ml-1">Mobile No. *</label>
+                        <input type="tel" id="sPhone" placeholder="98XXXXXXXX" class="form-input bg-white">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 ml-1">WhatsApp No.</label>
+                        <input type="tel" id="sWhatsapp" placeholder="WhatsApp Number" class="form-input bg-white">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-bold text-gray-500 ml-1">Aadhaar Number</label>
+                        <input type="number" id="sAadhar" placeholder="12 Digit Aadhaar" class="form-input bg-white">
+                    </div>
+                </div>
+
+                <div class="md:col-span-4">
+                    <label class="text-[10px] font-bold text-gray-500 ml-1">Residential Address</label>
+                    <textarea id="sAddress" placeholder="Enter full permanent address..." class="form-input h-20 resize-none"></textarea>
+                </div>
+
+                <button onclick="saveMasterProfile()" id="saveBtn" class="md:col-span-4 bg-indigo-600 text-white font-bold py-5 rounded-2xl shadow-xl hover:bg-indigo-700 active:scale-95 transition-all text-lg">
+                    SUBMIT & GENERATE ID CARD
                 </button>
             </div>
         </div>
 
-        <div class="flex gap-2 mb-6">
-            <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search by Name or Student ID..." class="flex-1 p-4 rounded-2xl border-none shadow-md outline-none focus:ring-2 focus:ring-indigo-500">
+        <div class="flex flex-col md:flex-row gap-4 mb-6 items-center">
+            <h2 class="text-xl font-bold text-gray-700 min-w-max">Master Directory</h2>
+            <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search by Name, Mobile or ID..." class="w-full p-4 rounded-2xl border-none shadow-md outline-none">
         </div>
 
         <div id="studentContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <p class="text-center py-10 text-gray-400 col-span-full">Profiles load ho rahi hain...</p>
-        </div>
+            </div>
     </div>
 
     <script>
@@ -84,62 +140,81 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        let studentPhotoBase64 = "";
+        let currentPhoto = "";
 
-        // Photo Preview and Conversion
         function previewPhoto(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = (e) => {
                     document.getElementById('imgPreview').src = e.target.result;
-                    studentPhotoBase64 = e.target.result; // Base64 string for saving
+                    currentPhoto = e.target.result;
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        async function saveProfile() {
+        async function saveMasterProfile() {
             const btn = document.getElementById('saveBtn');
-            const studentData = {
+            const data = {
                 name: document.getElementById('sName').value,
+                dob: document.getElementById('sDob').value,
+                gender: document.getElementById('sGender').value,
                 class: document.getElementById('sClass').value,
                 section: document.getElementById('sSection').value,
                 father: document.getElementById('fName').value,
+                mother: document.getElementById('mName').value,
                 phone: document.getElementById('sPhone').value,
-                customId: document.getElementById('sId').value || "TLI-" + Date.now().toString().slice(-4),
-                photo: studentPhotoBase64,
+                whatsapp: document.getElementById('sWhatsapp').value,
+                aadhar: document.getElementById('sAadhar').value,
+                address: document.getElementById('sAddress').value,
+                photo: currentPhoto,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            if(studentData.name && studentData.class) {
-                btn.disabled = true; btn.innerText = "Creating Profile...";
-                try {
-                    await db.collection("students").add(studentData);
-                    alert("Mubarak ho! Student ID: " + studentData.customId + " ban gayi hai.");
-                    location.reload();
-                } catch(e) { alert(e.message); btn.disabled = false; }
-            } else { alert("Naam aur Class bharna zaruri hai!"); }
+            if(!data.name || !data.class || !data.phone) {
+                alert("Please fill Mandatory fields (*)");
+                return;
+            }
+
+            btn.disabled = true; btn.innerText = "Generating Profile...";
+
+            try {
+                // Get Total count for Auto-ID
+                const snap = await db.collection("students").get();
+                data.idNumber = "TLI-" + (snap.size + 101); // Auto-generates TLI-101, 102...
+
+                await db.collection("students").add(data);
+                alert("Success! Profile Created with ID: " + data.idNumber);
+                location.reload();
+            } catch(e) { alert(e.message); btn.disabled = false; }
         }
 
         function loadProfiles() {
             db.collection("students").orderBy("createdAt", "desc").onSnapshot((snap) => {
                 const container = document.getElementById('studentContainer');
+                document.getElementById('totalCount').innerText = "Students: " + snap.size;
                 container.innerHTML = "";
                 snap.forEach(doc => {
                     const s = doc.data();
-                    const photo = s.photo || 'https://via.placeholder.com/80?text=No+Photo';
                     container.innerHTML += `
-                        <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex items-center gap-4 student-card" data-search="${s.name.toLowerCase()} ${s.customId}">
-                            <img src="${photo}" class="w-16 h-16 rounded-2xl object-cover border">
+                        <div class="bg-white p-5 rounded-[1.5rem] shadow-sm border border-gray-100 flex gap-4 student-card" data-search="${s.name.toLowerCase()} ${s.phone} ${s.idNumber}">
+                            <img src="${s.photo || 'https://via.placeholder.com/80'}" class="w-20 h-20 rounded-2xl object-cover shadow-sm">
                             <div class="flex-1">
+                                <p class="text-[10px] font-black text-indigo-500 uppercase">${s.idNumber}</p>
                                 <h4 class="font-bold text-gray-800 leading-tight">${s.name}</h4>
-                                <p class="text-[10px] font-bold text-indigo-600 uppercase">ID: ${s.customId} | Class: ${s.class}-${s.section}</p>
-                                <p class="text-[10px] text-gray-400">Father: ${s.father}</p>
+                                <p class="text-[10px] text-gray-400 font-bold uppercase mb-2">${s.class} | Section ${s.section}</p>
+                                <div class="grid grid-cols-2 gap-1 text-[9px] text-gray-500">
+                                    <p><b>F:</b> ${s.father || '-'}</p>
+                                    <p><b>M:</b> ${s.mother || '-'}</p>
+                                    <p><b>PH:</b> ${s.phone}</p>
+                                    <p><b>WA:</b> ${s.whatsapp || '-'}</p>
+                                </div>
                             </div>
-                            <div class="flex flex-col gap-1">
-                                <button onclick="addFee('${doc.id}', '${s.name}')" class="bg-green-100 text-green-700 px-3 py-1 rounded-lg text-[10px] font-black uppercase">Fees</button>
-                                <button onclick="deleteProfile('${doc.id}')" class="text-red-300 hover:text-red-500">🗑️</button>
-                            </div>
+                            <button onclick="deleteDoc('${doc.id}')" class="text-red-200 hover:text-red-500 transition-colors self-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
                         </div>`;
                 });
             });
@@ -152,7 +227,7 @@
             });
         }
 
-        function deleteProfile(id) { if(confirm("Profile delete karein?")) db.collection("students").doc(id).delete(); }
+        function deleteDoc(id) { if(confirm("Permanently delete this profile?")) db.collection("students").doc(id).delete(); }
 
         loadProfiles();
     </script>
