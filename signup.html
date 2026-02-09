@@ -1,1 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up | School System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
+<h2>Sign Up</h2>
+
+<input type="text" id="name" placeholder="Full Name">
+<br><br>
+
+<select id="role">
+  <option value="student">Student</option>
+  <option value="teacher">Teacher</option>
+  <option value="admin">Admin</option>
+  <option value="parent">Parent</option>
+</select>
+<br><br>
+
+<input type="email" id="email" placeholder="Email">
+<br><br>
+<input type="password" id="password" placeholder="Password">
+<br><br>
+<button onclick="signUpUser()">Sign Up</button>
+
+<p>Already have account? <a href="login.html">Login</a></p>
+
+<script type="module" src="js/auth.js"></script>
+<script type="module" src="js/firebase.js"></script>
+
+</body>
+</html>
