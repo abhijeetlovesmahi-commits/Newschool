@@ -1,179 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Lalit - Royal Exam Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: #050505;
-            color: #fff;
-            font-family: 'Poppins', sans-serif;
-            background-image: radial-gradient(circle at top right, #1a1a2e, #050505);
-        }
-        .royal-font { font-family: 'Cinzel', serif; }
-        
-        /* Glass Card Style matching your site */
-        .exam-card {
-            background: rgba(15, 15, 15, 0.8);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
-        }
-
-        /* Colorful Image with Golden Border */
-        .student-photo-frame {
-            border: 3px solid #D4AF37;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5), inset 0 0 10px rgba(212, 175, 55, 0.3);
-            transition: 0.3s;
-        }
-        .student-photo-frame:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
-        }
-
-        /* Royal Inputs */
-        .royal-input {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            color: #fff;
-            @apply w-full px-4 py-3 rounded-xl outline-none focus:border-amber-500 transition-all text-sm;
-        }
-        .royal-input:focus {
-            background: rgba(212, 175, 55, 0.05);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
-        }
-
-        .gold-label {
-            @apply text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-1 block ml-1;
-        }
-
-        /* Submit Button */
-        .btn-royal {
-            background: linear-gradient(45deg, #BF953F, #FCF6BA, #B38728);
-            color: #000;
-            @apply font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95 uppercase tracking-widest text-xs w-full;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>The Lalit International School</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="p-4 md:p-10">
+<body>
 
-    <div class="max-w-5xl mx-auto">
-        <div class="text-center mb-12">
-            <h1 class="royal-font text-4xl text-amber-500 tracking-tighter">EXAMINATION FORM</h1>
-            <p class="text-gray-500 text-xs tracking-[0.5em] uppercase mt-2">The Lalit International School</p>
-        </div>
+  <h1>The Lalit International School</h1>
+  <p>CBSE School Management System</p>
 
-        <div class="exam-card p-8 md:p-12">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
-                
-                <div class="md:col-span-3 flex flex-col items-center">
-                    <div class="relative group">
-                        <img id="imgPreview" src="https://via.placeholder.com/150?text=Student+Photo" class="w-40 h-48 object-cover rounded-2xl student-photo-frame">
-                        <input type="file" id="photoInput" class="hidden" accept="image/*" onchange="previewPhoto(this)">
-                        <button onclick="document.getElementById('photoInput').click()" class="absolute -bottom-3 bg-amber-600 p-2 rounded-lg text-black font-bold text-[10px] hover:bg-amber-400">CHANGE PHOTO</button>
-                    </div>
-                </div>
+  <div class="buttons">
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign Up</a>
+  </div>
 
-                <div class="md:col-span-9">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="gold-label">Student Name</label>
-                            <input type="text" id="exName" placeholder="Full Name" class="royal-input">
-                        </div>
-                        <div>
-                            <label class="gold-label">Roll Number</label>
-                            <input type="number" id="exRoll" placeholder="e.g. 101" class="royal-input">
-                        </div>
-                        <div>
-                            <label class="gold-label">Class</label>
-                            <select id="exClass" class="royal-input">
-                                <option value="10th">10th Grade</option>
-                                <option value="12th">12th Grade</option>
-                                <script>for(let i=1; i<=9; i++) document.write(`<option value="${i}th">${i}th Grade</option>`);</script>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="gold-label">Examination Type</label>
-                            <select id="exType" class="royal-input">
-                                <option>Quarterly</option>
-                                <option>Half Yearly</option>
-                                <option>Final Exam</option>
-                                <option>Unit Test</option>
-                            </select>
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="gold-label">Subject Selection</label>
-                            <input type="text" id="exSubject" placeholder="Physics, Math, English..." class="royal-input">
-                        </div>
-                        <div>
-                            <label class="gold-label">Father's Name</label>
-                            <input type="text" id="exFather" class="royal-input">
-                        </div>
-                        <div>
-                            <label class="gold-label">Mobile Number</label>
-                            <input type="tel" id="exPhone" class="royal-input">
-                        </div>
-                    </div>
-
-                    <div class="mt-10">
-                        <button onclick="submitExamForm()" class="btn-royal">Generate Admit Card</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Firebase config yahan paste karein (Aapka purana wala)
-        const firebaseConfig = {
-            apiKey: "AIzaSyDqDmsMp2eAuHJBcjW-ciO2JcLTXapiIrs",
-            authDomain: "the-lalit-d7472.firebaseapp.com",
-            projectId: "the-lalit-d7472",
-            storageBucket: "the-lalit-d7472.firebasestorage.app",
-            messagingSenderId: "479237084229",
-            appId: "1:479237084229:web:f1da384b45c5883b12ff2c"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        let currentPhoto = "";
-
-        function previewPhoto(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('imgPreview').src = e.target.result;
-                    currentPhoto = e.target.result;
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        async function submitExamForm() {
-            const data = {
-                name: document.getElementById('exName').value,
-                roll: document.getElementById('exRoll').value,
-                class: document.getElementById('exClass').value,
-                examType: document.getElementById('exType').value,
-                subjects: document.getElementById('exSubject').value,
-                phone: document.getElementById('exPhone').value,
-                photo: currentPhoto,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            if(!data.name || !data.roll) return alert("Bhai, Name aur Roll No zaroori hai!");
-
-            try {
-                await db.collection("exam_forms").add(data);
-                alert("Royal Exam Form Submitted Successfully!");
-                location.reload();
-            } catch(e) { alert(e.message); }
-        }
-    </script>
 </body>
 </html>
